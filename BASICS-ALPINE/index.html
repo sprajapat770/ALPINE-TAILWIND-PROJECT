@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alpine Js Basics</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 </head>
 <body class="text-center">
-    What you feel you can write here 
-    <section>
-        <header class="bg:gray">
-            <nav class="flex flex-wrap gap-2 flex-col f;ex">
-                <ul role="navigation">
-                    <li>
+    <header class="bg-slate-200 p-6">
+            <nav class="flex">
+                <ul role="navigation" class="flex gap-4 m-auto">
+                    <li> 
                         Essentials
                     </li>
                     <li>
@@ -26,7 +25,9 @@
                     </li>
                 </ul>
             </nav>
-        </header>
-    </section>
+    </header>
+    <main class="p-10 bg-gray-950 h-screen text-white">
+        <a href="#" class="m-auto">Learn Basics Of Alpine Js</a>
+    </main>
 </body>
 </html>
