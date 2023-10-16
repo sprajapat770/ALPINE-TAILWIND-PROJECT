@@ -10,7 +10,137 @@
 </head>
 <body>
     <header-component></header-component>
+    <main class="flex content-center justify-center flex-col items-center w-full">
+        <div>
+            <h2>x-text directives</h2>
+            <pre>
+                <code>
+                    &lt;div x-data="{ username: 'calebporzio' }"&gt;
+                        Username: &lt;strong x-text="username"&gt;&lt;/strong&gt;
+                    &lt;/div&gt;</div>
+                </code>
+            </pre>         
+            <span>result below</span>   
+            <div x-data="{ username: 'suraj' }">
+                Username: <strong x-text="username"></strong>
+            </div>
+        </div>
 
+        <div>
+            <h2>x-html directives</h2>
+            <pre>
+                <code>
+                    &lt;div x-data="{ username: '<strong>suraj</strong>' }"&gt;
+                        Username: &lt; x-html="username"&gt;&lt;span&gt;
+                        &lt;/div&gt;
+                </code>
+            </pre>         
+            <span>result below</span>   
+            <div x-data="{ username: '<strong>suraj</strong>' }">
+                Username: <span x-html="username"></span>
+            </div>
 
+            <div class="bg-slate-200 py-5 p-5 mt-10">does this work with x-text lets see</div>   
+            <div class="mb-10" x-data="{ username: '<strong>suraj</strong>' }">
+                Username: <span x-text="username"></span>
+            </div>
+
+            <div class="note bg-slate-200 py-5 p-5 mt-10">
+                No its not work like x-html its good both are different properties & x-text work like innerText & 
+                x-html work like innerHTML
+                <div>⚠️ X-HTML use on trusted content and never on user-provided content. ⚠️ Dynamically rendering HTML from third parties can easily lead to XSS vulnerabilities.</div>
+            </div>   
+        </div>
+        <div>
+            <h2>x-html directives</h2>
+            <pre>
+                <code>                  
+                    &lt;ul x-data="{ colors: ['Red', 'Orange', 'Yellow'] }"&gt;
+                        &lt;template x-for="color in colors"&gt;
+                        &lt;li x-text="color"&gt;&lt;/li&gt;
+                        &lt;/template&gt;
+                        &lt;/ul&gt;
+                </code>
+            </pre>         
+            <span>result below</span>   
+            <ul x-data="{ colors: ['Red', 'Orange', 'Yellow'] }" class="">
+                <template x-for="color in colors">
+                    <li x-text="color"></li>
+                </template>
+            </ul>
+
+            <div class="note bg-slate-200 py-5 p-5 mt-10">
+                <code>
+                    x-for MUST be declared on a &lt;template&gt; element That &lt;template&gt; element MUST contain only one root element
+                </code>
+            </div>
+
+            <!-- Keys 
+            Accessing indexes
+            Iterating over a range -->
+                <strong> Contents of a &lt;template&gt;</strong>
+                <div>As mentioned above, an &lt;template&gt; tag must contain only one root element.</div>
+                
+                <pre>
+                    <code>    
+                        <div>For example, the following code will not work:</div>
+                        &lt;template x-for="color in colors"&gt;
+                        &lt;span&gt;The next color is &lt;/span&gt;&lt;span x-text="color"&gt;
+                                &lt;/template&gt;
+                        
+                        <div>but this code will work:</div>
+                        
+                        &lt;template x-for="color in colors"&gt;
+                        &lt;p&gt;
+                            &lt;span&gt;The next color is &lt;/span&gt;&lt;span x-text="color"&gt;
+                                &lt;/p&gt;
+                            &lt;/template&gt;
+                    </code>
+                </pre>
+        </div>
+        <div>
+            <h2>x-if directives</h2>
+            <pre>
+                <code>
+                    &lt;template x-if="open"&gt;
+                    &lt;div&gt;Contents...&lt;/div&gt;
+                    &lt;/template&gt;
+                </code>
+            </pre>         
+            <span>result below</span>   
+            <div x-data="{ open: false }">
+                <template x-if="open">
+                    <div>Contents...</div>
+                </template>
+                <div class="my-element" x-if="open">this is normal content let see effect</div>
+                <button @click="open = !open">Click to show content</button>
+            </div>
+            <div class="bg-slate-200 py-5 p-5 mt-10"><p>is this similar to x-show</p>
+            <p>no x-show add display property where this add or remove complete element so it work better with template tag</p></div>   
+            <div class="note bg-slate-200 py-5 pl-5 mt-10">
+                <div>Unlike x-show, x-if, does NOT support transitioning toggles with x-transition.</div>
+            </div>   
+        </div>
+
+        <div>
+            <h2>x-ignore directives</h2>
+            <pre>
+                <code>
+                    &lt;div x-data="{ label: 'From Alpine' }"&lt;
+                        &lt;div x-ignore&gt;
+                            &lt;span x-text="label"&gt;&lt;/span&gt;
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+                </code>
+            </pre>         
+            <span>result below</span>   
+            <div x-data="{ label: 'From Alpine' }">
+                <div x-ignore>
+                    <span x-text="label"></span>
+                </div>
+            </div>
+            <div class="bg-slate-200 py-5 p-5 mt-10">this is basically used to ignore complete div structure if no alpine code exist or you do not want to alpine for particular structure</div>
+        </div>
+    </main>
 </body>
 </html>
