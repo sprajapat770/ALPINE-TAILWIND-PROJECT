@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advance Directives x-init</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="../JS/header.js"></script>
+</head>
+<body>
+    <header-component></header-component>
+    <main>
+        <div class="flex justify-center flex-col place-items-center">
+            <h1 class="font-bold text-4xl">x-init</h1>
+            <div class="description">
+                <p>
+                    The x-init directive allows you to hook into the initialization phase of any element in Alpine.
+                </p>
+            </div>
+            <div class="code">
+                <pre>
+                    <code>
+                        &lt;div x-init="console.log('I\'m being initialized!')"&gt;&lt;/div&gt;
+                    </code>
+                </pre>
+            </div>
+            <div class="practice">
+                <div x-init="console.log('I\'m being initialized!')"></div>
+
+                <div
+                    x-data="{ posts: [] }"
+                    x-init="posts = await (await fetch('https://jsonplaceholder.typicode.com/users')).json()"
+                >
+                    data has been loading
+                    <ul>
+                        <template x-for="data in posts">
+                            <li x-text="data.name"></li>
+                        </template>
+        
+                    </ul>            
+                </div>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">$nextTick</h2>
+            <div class="nextTick__desc">
+                <ul>
+                    <li>
+                        Sometimes, you want to wait until after Alpine has completely finished rendering to execute some code.
+                    </li>
+                    <li>This would be something like useEffect(..., []) in react, or mount in Vue.</li>
+                </ul>
+            </div>
+            <pre>
+                <code>
+                    &lt;div x-init="$nextTick(() =&gt; { ... })"&gt;&lt;/div&gt;
+                </code>
+            </pre>
+            <div class="practice">
+                <div class="bg-pink-200 my-10 p-5" 
+                    x-data="{ posts: [] }"
+                    x-init="$nextTick( async () =>{ 
+                        posts = await (await fetch('https://jsonplaceholder.typicode.com/users')).json();
+                    } )">
+                        data loaded with nextTick
+                    <ul>
+                        <template x-for="data in posts">
+                            <li x-text="data.name"></li>
+                        </template>
+        
+                    </ul>            
+                </div>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Standalone x-init</h2>
+            <pre>
+                <code>
+                    &lt;span x-init="console.log('I can initialize too')"&gt;&lt;/span&gt;
+                </code>
+            </pre>
+            <div class="practice">
+                <div x-data>
+                    <span x-init="console.log('I can initialize')"></span>
+                </div>
+                 
+                <span x-init="console.log('I can initialize too')"></span>
+            </div>
+
+           
+
+            <h2 class="font-bold text-4xl mt-4">Auto-evaluate init() method</h2>
+            <pre>
+                <code>
+                    &lt;div x-data="{
+                        init() {
+                            console.log('I am called automatically')
+                        }
+                    }"&gt;
+                        element
+                        &lt;/div&gt;
+                </code>
+            </pre>
+            <div class="practice">
+                <div x-data="{
+                    init() {
+                        console.log('I am called automatically')
+                    }
+                }">
+                element
+                </div>
+                <div x-data="dropdown"></div>
+                <script>
+                     document.addEventListener('alpine:init', () => {
+                        Alpine.data('dropdown', () => ({
+                                init() {
+                                    console.log('I will get evaluated when initializing each "dropdown" component.')
+                                },
+                        }))
+                    });
+                </script>
+
+                    <div
+                    x-data="{
+                        init() {
+                            console.log('I am called first')
+                        }
+                    }"
+                    x-init="console.log('I am called second')"
+                    >
+                    ...
+                    </div>
+            </div>           
+        </div>
+    </main>
+    <footer>
+        <div class="note bg-slate-200 py-5 p-5 my-10">
+            <ul class="list-decimal">
+                <li>If the x-data object of a component contains an init() method, it will be called automatically. For example:</li>
+                <li>Because x-data is evaluated as a normal JavaScript object, in addition to state, you can store methods and even getters.</li>
+                <li>Data-less components</li>
+                <li>Sometimes you may only have a single element inside your Alpine component, like the following:</li>
+            </ul>
+        </div>
+    </footer>
+</body>
+</html>
