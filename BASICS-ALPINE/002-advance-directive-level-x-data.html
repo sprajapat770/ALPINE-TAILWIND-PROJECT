@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advance Directives</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="../JS/header.js"></script>
+</head>
+<body>
+    <header-component></header-component>
+    <main>
+        <div class="flex justify-center flex-col place-items-center">
+            <h1 class="font-bold text-4xl">x-data</h1>
+            <div class="description">
+                <p>
+                    Everything in Alpine starts with the x-data directive.
+                </p>
+                <p>x-data defines a chunk of HTML as an Alpine component and provides the reactive data for that component to reference.
+                </p>
+            </div>
+            <div class="code">
+                <pre>
+                    <code>
+                        &lt;div x-data="{ open: false }"&gt;
+                        &lt;button @click="open = ! open"&gt;Toggle Content&lt;/button&gt;
+                         
+                        &lt;div x-show="open"&gt;
+                                Content...
+                                &lt;/div&gt;
+                                &lt;/div&gt;
+                    </code>
+                </pre>
+            </div>
+            <div class="practice">
+                <div x-data="{ open: false }">
+                    <button @click="open = ! open">Toggle Content</button>
+                 
+                    <div x-show="open">
+                        Content...
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Scope</h2>
+            <div class="practice">
+                <div x-data="{ foo: 'bar' }">
+                    <span x-text="foo"><!-- Will output: "bar" --></span>
+                 
+                    <div x-data="{ bar: 'baz' }">
+                        <span x-text="foo"><!-- Will output: "bar" --></span>
+                 
+                        <div x-data="{ foo: 'bob' }">
+                            <span x-text="foo"><!-- Will output: "bob" --></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Methods</h2>
+            <div x-data="{ open: false, toggle() { this.open = ! this.open } }">
+                <button @click="toggle()">Toggle Content</button>
+                <button @click="toggle" class="block mt-2">Type 2 toggle content</button>
+                <div x-show="open">
+                    Content...
+                </div>
+            </div>
+            <div class="method__desc">
+                You'll also notice the usage of this. to access state on the object itself. This is because Alpine evaluates this data object like any standard JavaScript object with a this context.
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Getters</h2>
+            <div class="practice"><div x-data="{
+                open: false,
+                get isOpen() { return this.open },
+                toggle() { this.open = ! this.open },
+            }">
+                <button @click="toggle()">Toggle Content</button>
+             
+                <div x-show="isOpen">
+                    Content...
+                </div>
+            </div></div>
+            <div class="getter__desc">
+                <ul class="list-decimal">
+                    <li>JavaScript getters are handy when the sole purpose of a method is to return data based on other state.</li>
+                    <li>Let's refactor our component to use a getter called isOpen instead of accessing open directly.</li>
+                    <li>In this case there is no tangible benefit. But in some cases, getters are helpful for providing a more expressive syntax in your components.</li>
+                </ul>
+            </div>
+            
+            <h2 class="font-bold text-4xl mt-4">Data-less components</h2>
+            <pre><code>
+                &lt;div x-data="{}"&gt;&lt;/div&gt;
+                &lt;div x-data>&lt;/div&gt;
+            </code></pre>
+            <div class="practice">
+                <div x-data="{}">
+                    <p>nothing inside this div normal text only</p>
+                </div>
+                <div x-data>
+                    <p>nothing inside this div normal text only</p>
+                </div>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Single-element components</h2>
+           
+            <pre><code>
+                &lt;div x-data="{ open: true }"&gt;
+                    &lt;button @click="open = false" x-show="open"&gt;Hide Me  &lt;/button&gt;
+                &lt;/div&gt;
+                &lt;button x-data="{ open: true }" @click="open = false" x-show="open"&gt;
+                    Hide Me
+                &lt;/button&gt;
+            </code></pre>
+            <div class="practice">
+                <button x-data="{ open: true }" @click="open = !open" x-show="open">
+                    Hide Me
+                </button>
+            </div>
+
+            <h2 class="font-bold text-4xl mt-4">Re-usable Data</h2>
+            <pre><code >
+                    &lt;div x-data="dropdown"&gt;
+                        &lt;button @click="toggle"&gt;Toggle Content&lt;/button&gt;
+
+                        &lt;div x-show="open"&gt;
+                            Content...
+                        &lt;/div&gt;
+                    &lt;/div&gt;
+
+                    &lt;script&gt;
+                        document.addEventListener('alpine:init', () =&gt; {
+                            Alpine.data('dropdown', () =&gt; ({
+                                open: false,
+
+                                toggle() {
+                                    this.open = ! this.open
+                                },
+                            }))
+                        })
+                    &lt;/script&gt;</div></code></pre>
+            <div class="practice">
+                <div x-data="dropdown">
+                    <button @click="toggle">Toggle Content</button>
+                    
+                    <div x-show="open">
+                        Content...
+                    </div>
+                </div>
+
+                <div x-data="dropdown">
+                    <button @click="toggle">Show/hide options</button>
+                    <ul x-show="open">
+                        <li>option 1</li>
+                        <li>option 2</li>
+                        <li>option 3</li>
+                    </ul>
+                    
+                </div>
+                    
+                <script>
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.data('dropdown', () => ({
+                            open: false,
+                    
+                            toggle() {
+                                this.open = ! this.open
+                            },
+                        }))
+                    })
+                </script>
+            </div>
+            <div class="note bg-slate-200 py-5 p-5 my-10">
+                <ul class="list-decimal">
+                    <li>Everything in Alpine starts with the x-data directive.</li>
+                    <li>Because x-data is evaluated as a normal JavaScript object, in addition to state, you can store methods and even getters.</li>
+                    <li>Data-less components</li>
+                    <li>Sometimes you may only have a single element inside your Alpine component, like the following:</li>
+                </ul>
+            </div> 
+            
+            
+        </div>
+    </main>
+</body>
+</html>
